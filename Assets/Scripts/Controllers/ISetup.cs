@@ -1,4 +1,4 @@
-﻿public interface ISetup<T>
+public interface ISetup<T>
 {
     void Setup(T model);
 }
