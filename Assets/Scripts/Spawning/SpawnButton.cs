@@ -1,29 +1,29 @@
-using System;
-using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-
-public static class GameServiceRegistry
+[RequireComponent(typeof(Button))]
+public class SpawnButton : MonoBehaviour
 {
-    private static readonly Dictionary<Type, object> _services = new();
+    private Button _button;
 
-    
-    public static void Add<T>(T service) where T : class
+    private void Awake()
     {
-        var t = typeof(T);
-        if (!_services.ContainsKey(t) && service != null)
-            _services[t] = service;
+        _button = GetComponent<Button>();
+        _button.onClick.AddListener(OnClick);
     }
 
-    
-    public static T Get<T>() where T : class
+    private void OnDestroy()
     {
-        _services.TryGetValue(typeof(T), out var svc);
-        return svc as T;
+        _button.onClick.RemoveListener(OnClick);
     }
 
-   
-    public static void Remove<T>() where T : class
+    private void OnClick()
     {
-        _services.Remove(typeof(T));
+        
+        var spawner = CharacterSpawner.Instance;
+        if (spawner != null)
+            spawner.Spawn();
+        else
+            Debug.LogError(" No existe CharacterSpawner.Instance en la escena.");
     }
 }
