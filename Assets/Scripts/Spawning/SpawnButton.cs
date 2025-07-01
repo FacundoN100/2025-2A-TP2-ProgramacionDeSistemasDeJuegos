@@ -1,39 +1,29 @@
 using System;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class SpawnButton : MonoBehaviour
+
+public static class GameServiceRegistry
 {
-    [SerializeField] private Button button;
+    private static readonly Dictionary<Type, object> _services = new();
 
-    private void Reset()
-        => button = GetComponent<Button>();
-
-    private void Awake()
+    
+    public static void Add<T>(T service) where T : class
     {
-        if (!button)
-            button = GetComponent<Button>();
+        var t = typeof(T);
+        if (!_services.ContainsKey(t) && service != null)
+            _services[t] = service;
     }
 
-    private void OnEnable()
+    
+    public static T Get<T>() where T : class
     {
-        if (!button)
-        {
-            Debug.LogError($"{name} <color=grey>({GetType().Name})</color>: {nameof(button)} is null!");
-            enabled = false;
-            return;
-        }
-        button.onClick.AddListener(HandleClick);
+        _services.TryGetValue(typeof(T), out var svc);
+        return svc as T;
     }
 
-    private void OnDisable()
+   
+    public static void Remove<T>() where T : class
     {
-        button?.onClick?.RemoveListener(HandleClick);
-    }
-
-    private void HandleClick()
-    {
-        var spawner = FindFirstObjectByType<CharacterSpawner>();
-        spawner.Spawn();
+        _services.Remove(typeof(T));
     }
 }
