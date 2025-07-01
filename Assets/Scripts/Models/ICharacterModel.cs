@@ -1,4 +1,4 @@
-﻿public interface ICharacterModel
+public interface ICharacterModel
 {
     float Acceleration { get; }
     float Speed { get; }
