@@ -24,6 +24,6 @@ public class SpawnButton : MonoBehaviour
         if (spawner != null)
             spawner.Spawn();
         else
-            Debug.LogError(" No existe CharacterSpawner.Instance en la escena.");
+            Debug.LogError(" CharacterSpawner not found in GameServiceRegistry.");
     }
 }
